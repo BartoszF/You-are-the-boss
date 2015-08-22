@@ -7,7 +7,10 @@ function Team()
 
   this.report = game.add.sprite(400,800,"report");
   this.report.anchor.set(0.5,0.5);
-  this.report.visible = false;
+
+    bmd = game.add.bitmapData(256,128);
+  rep = game.add.sprite(0, 0, bmd);
+  rep.anchor.set(0.5);
 
   rep.position.set(400,800);
 
@@ -20,13 +23,22 @@ function Team()
 Team.prototype.guys = [];
 Team.prototype.actual = 0;
 Team.prototype.report = null;
+Team.prototype.stress = 0;
 
 Team.prototype.next = function()
 {
   var tween = game.add.tween(this.guys[this.actual].guy.position).to({x: -400}, 500, Phaser.Easing.Quadratic.Out,true);
   this.guys[this.actual+1].visible(true);
   var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
-  this.actual++;
+
+  if(this.actual+1 < this.guys.length)
+  {
+    this.actual++;
+  }
+  else
+  {
+    this.endOfDay();
+  }
 
   this.nextRep();
 }
@@ -64,11 +76,11 @@ Team.prototype.drawRep = function()
   bmd.ctx.beginPath();
   bmd.ctx.moveTo(25,64);
 
-  for(var i =min;i<wo.length;i++)
+  for(var i =min+1;i<wo.length;i++)
   {
     if(wo[i] > 0) bmd.ctx.strokeStyle = "green";
     else bmd.ctx.strokeStyle = "red";
-    bmd.ctx.lineTo(25+i*10, 64 + wo[i]*36);
+    bmd.ctx.lineTo(25+i*32, 64 - wo[i]*36);
     bmd.ctx.lineWidth = 2;
     bmd.ctx.stroke();
     
@@ -90,4 +102,15 @@ Team.prototype.threaten = function()
   this.guys[this.actual].mood = -2;
   this.guys[this.actual].stress *= 1.5;
   this.next();
+}
+
+Team.prototype.endOfDay = function()
+{
+
+  for(var i=0;i<this.guys.length;i++)
+  {
+    this.stress += this.guys[i].stress;
+  }
+
+  this.stress /= this.guys[i].length;
 }

@@ -31,56 +31,33 @@ function create()
   desk.scale.set(3.12,0.8);
   desk.smoothed = false;
 
-  bmd = game.add.bitmapData(256,128);
-  rep = game.add.sprite(0, 0, bmd);
-  rep.anchor.set(0.5);
-
   team = new Team();
 
-  var fireButton = game.add.sprite(game.world.centerX, 550, 'fire_butt');
-  fireButton.anchor.set(0.5,0.5);
-  fireButton.scale.set(0.75,1);
-  fireButton.smoothed = false;
-  fireButton.inputEnabled = true;
-  fireButton.input.priorityID = 1;
-  fireButton.input.useHandCursor = true;
-  fireButton.events.onInputDown.add(team.fire, team);
-
-  var style = { font: "38px Minecraft", stroke : '#7D0214', strokeThickness : 2, fill: "#00000", wordWrap: true, wordWrapWidth: fireButton.width, align: "center" };
-
-  text = game.add.text(game.world.centerX, 550, "FIRE", style);
-  text.anchor.set(0.5, 0.5);
-
-  var praiseButton = game.add.sprite(200, 550, 'blue_butt');
-  praiseButton.anchor.set(0.5,0.5);
-  praiseButton.scale.set(0.75,1);
-  praiseButton.smoothed = false;
-  praiseButton.inputEnabled = true;
-  praiseButton.input.priorityID = 1;
-  praiseButton.input.useHandCursor = true;
-  praiseButton.events.onInputDown.add(team.praise, team);
-
-  var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true, wordWrapWidth: praiseButton.width, align: "center" };
-
-  text = game.add.text(200, 550, "Praise", style);
-  text.anchor.set(0.5, 0.5);
-
-  var threatenButton = game.add.sprite(600, 550, 'blue_butt');
-  threatenButton.anchor.set(0.5,0.5);
-  threatenButton.scale.set(0.75,1);
-  threatenButton.smoothed = false;
-  threatenButton.inputEnabled = true;
-  threatenButton.input.priorityID = 1;
-  threatenButton.input.useHandCursor = true;
-  threatenButton.events.onInputDown.add(team.threaten, team);
-
-  var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true, wordWrapWidth: threatenButton.width, align: "center" };
-
-  text = game.add.text(600, 550, "Threaten", style);
-  text.anchor.set(0.5, 0.5);
+  var fire = makeButton(game.world.centerX,550,'fire_butt',"FIRE",team.fire,team,{ font: "38px Minecraft", stroke : '#7D0214', strokeThickness : 2, fill: "#00000", wordWrap: true, align: "center" });
+  var praise = makeButton(200,550,'blue_butt',"Praise",team.praise,team,{ font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" });
+  var threaten = makeButton(600,550,'blue_butt',"Threaten",team.threaten,team,{ font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" });
 }
 
 function update() 
 {
   team.drawRep();
+}
+
+function makeButton(x,y,spri,text,func,list,style)
+{
+  var butt = game.add.sprite(x,y,spri);
+  butt.anchor.set(0.5,0.5);
+  butt.scale.set(0.75,1);
+  butt.smoothed = false;
+  butt.inputEnabled = true;
+  butt.input.priorityID = 1;
+  butt.input.useHandCursor = true;
+  butt.events.onInputDown.add(func, list);
+
+  style['wordWrapWidth'] = butt.width;
+
+  var text = game.add.text(x+5, y+5, text, style);
+  text.anchor.set(0.5, 0.5);
+
+  return [butt,text];
 }
