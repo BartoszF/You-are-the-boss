@@ -3,33 +3,36 @@ function Person()
   var stress;
   var work = [];
   var skill = (Math.random()* 10)+1;
+  var mood = 0;
 
   this.guy = game.add.group();
 
-  var torso = this.guy.create(400,300,"guy");
+  var torso = this.guy.create(0,300,"guy");
   torso.anchor.set(0.5,0);
   torso.scale.set(3,3);
   torso.smoothed = false;
 
-  var face = this.guy.create(400,300,"faces");
+  var face = this.guy.create(0,300,"faces");
   face.frame = 0;
   face.scale.set(3,3);
   face.anchor.set(0.5,0.95);
   face.smoothed = false;
 
-  var mouth = this.guy.create(400,250,"mouths");
+  var mouth = this.guy.create(0,250,"mouths");
   mouth.frame = parseInt(Math.random()* Person.maxMouths);
   mouth.scale.set(2,2);
   mouth.anchor.set(0.5,0.5);
   mouth.smoothed = false;
 
-  var eye = this.guy.create(400,200,"eyes");
+  var eye = this.guy.create(0,200,"eyes");
   eye.frame = parseInt(Math.random()* Person.maxEyes);
   eye.scale.set(2,2);
   eye.anchor.set(0.5,0.5);
   eye.smoothed = false;
 
   this.visible(false);
+
+  this.guy.position.x = 1200;
 
   Person.layer.add(this.guy);
 }
