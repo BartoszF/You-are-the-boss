@@ -24,7 +24,8 @@ function create()
   desk.scale.set(3.12,0.8);
   desk.smoothed = false;
 
-  
+  var team = new Team();
+
 }
 
 function update() 
