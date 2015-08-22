@@ -3,6 +3,7 @@ var bg;
 var persLayer;
 var desk;
 var team;
+var bmd,rep;
 
 function preload() 
 {
@@ -29,6 +30,10 @@ function create()
   desk.anchor.set(0,1);
   desk.scale.set(3.12,0.8);
   desk.smoothed = false;
+
+  bmd = game.add.bitmapData(256,128);
+  rep = game.add.sprite(0, 0, bmd);
+  rep.anchor.set(0.5);
 
   team = new Team();
 
@@ -77,4 +82,5 @@ function create()
 
 function update() 
 {
+  team.drawRep();
 }

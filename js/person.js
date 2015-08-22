@@ -1,10 +1,5 @@
 function Person()
 {
-  var stress;
-  var work = [];
-  var skill = (Math.random()* 10)+1;
-  var mood = 0;
-
   this.guy = game.add.group();
 
   var torso = this.guy.create(0,300,"guy");
@@ -34,11 +29,20 @@ function Person()
 
   this.guy.position.x = 1200;
 
+  for(var i = 0;i<6;i++)
+  {
+    this.work[i] = 0.8;
+  }
+
   Person.layer.add(this.guy);
 }
 
 Person.prototype.guy = null;
 Person.prototype.report = null;
+Person.prototype.stress = 0;
+Person.prototype.work = [];
+Person.prototype.skill = (Math.random()* 10)+1;
+Person.prototype.mood = 0;
 Person.layer = null;
 
 Person.init = function()
@@ -48,7 +52,7 @@ Person.init = function()
 
 
   game.load.image("guy","res/graphics/guy_torso.png");
-  game.load.image("guy","res/graphics/report.png");
+  game.load.image("report","res/graphics/report.png");
   game.load.spritesheet("faces","res/graphics/faces.png",64,64,Person.maxFaces);
   game.load.spritesheet("mouths","res/graphics/mouths.png",64,32,Person.maxMouths);
   game.load.spritesheet("eyes","res/graphics/eyes.png",64,32,Person.maxEyes);
