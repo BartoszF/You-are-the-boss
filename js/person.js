@@ -29,14 +29,17 @@ function Person()
 
   this.guy.position.x = 1200;
 
-  for(var i = 0;i<6;i++)
+  Math.seedrandom(Date.now() + Math.random() + (Person.r++));
+  this.work[0] = (Math.random()*2) - 1;
+  for(var i = 1;i<5;i++)
   {
-    this.work[i] = 0.8;
+    this.work[i] = this.work[i-1] + (Math.random()*0.4)-0.2;
   }
 
   Person.layer.add(this.guy);
 }
 
+Person.r = 1;
 Person.prototype.guy = null;
 Person.prototype.report = null;
 Person.prototype.stress = 0;

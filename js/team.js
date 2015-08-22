@@ -2,7 +2,8 @@ function Team()
 {
   for(var i=0;i<50;i++)
   {
-    this.guys.push(new Person());
+    var p = new Person();
+    this.guys.push(p);
   }
 
   this.report = game.add.sprite(400,800,"report");
@@ -64,6 +65,8 @@ Team.prototype.nextRepCom = function()
 {
   game.add.tween(this.report.position).to({y: 450}, 250, Phaser.Easing.Quadratic.In,true);
   game.add.tween(rep.position).to({y: 450}, 250, Phaser.Easing.Quadratic.In,true);
+
+  this.drawRep();
 }
 
 Team.prototype.drawRep = function()
@@ -72,7 +75,6 @@ Team.prototype.drawRep = function()
   var min = (wo.length-10) < 0 ? 0 : (wo.length-10);
 
   bmd.clear();
-  bmd.ctx.beginPath();
   bmd.ctx.beginPath();
   bmd.ctx.moveTo(25,64);
 
@@ -87,7 +89,6 @@ Team.prototype.drawRep = function()
   }
   bmd.ctx.closePath();
   bmd.render();
-  //bmd.refreshBuffer();
 }
 
 Team.prototype.praise = function()

@@ -23,9 +23,6 @@ function create()
   persLayer = game.add.group();
   Person.layer = persLayer;
 
-  //var p = new Person();
-  //p.visible(true);
-
   desk = game.add.sprite(0,600,"desk");
   desk.anchor.set(0,1);
   desk.scale.set(3.12,0.8);
@@ -40,7 +37,7 @@ function create()
 
 function update() 
 {
-  team.drawRep();
+  //team.drawRep();
 }
 
 function makeButton(x,y,spri,text,func,list,style)
