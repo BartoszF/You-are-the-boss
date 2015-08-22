@@ -10,6 +10,7 @@ function preload()
   game.load.image("bg","res/graphics/bg.png");
   game.load.image("desk","res/graphics/desk.png");
   game.load.image("fire_butt","res/graphics/fire_butt.png");
+  game.load.image("blue_butt","res/graphics/blue_butt.png");
 }
 
 function create() 
@@ -31,13 +32,47 @@ function create()
 
   team = new Team();
 
-  var closeButton = game.add.sprite(game.world.centerX, 400, 'fire_butt');
-  closeButton.anchor.set(0.5,0.5);
-  closeButton.scale.set(2,2);
-  closeButton.inputEnabled = true;
-  closeButton.input.priorityID = 1;
-  closeButton.input.useHandCursor = true;
-  closeButton.events.onInputDown.add(team.fire, this);
+  var fireButton = game.add.sprite(game.world.centerX, 550, 'fire_butt');
+  fireButton.anchor.set(0.5,0.5);
+  fireButton.scale.set(0.75,1);
+  fireButton.smoothed = false;
+  fireButton.inputEnabled = true;
+  fireButton.input.priorityID = 1;
+  fireButton.input.useHandCursor = true;
+  fireButton.events.onInputDown.add(team.fire, team);
+
+  var style = { font: "38px Minecraft", stroke : '#7D0214', strokeThickness : 2, fill: "#00000", wordWrap: true, wordWrapWidth: fireButton.width, align: "center" };
+
+  text = game.add.text(game.world.centerX, 550, "FIRE", style);
+  text.anchor.set(0.5, 0.5);
+
+  var praiseButton = game.add.sprite(200, 550, 'blue_butt');
+  praiseButton.anchor.set(0.5,0.5);
+  praiseButton.scale.set(0.75,1);
+  praiseButton.smoothed = false;
+  praiseButton.inputEnabled = true;
+  praiseButton.input.priorityID = 1;
+  praiseButton.input.useHandCursor = true;
+  praiseButton.events.onInputDown.add(team.praise, team);
+
+  var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true, wordWrapWidth: praiseButton.width, align: "center" };
+
+  text = game.add.text(200, 550, "Praise", style);
+  text.anchor.set(0.5, 0.5);
+
+  var threatenButton = game.add.sprite(600, 550, 'blue_butt');
+  threatenButton.anchor.set(0.5,0.5);
+  threatenButton.scale.set(0.75,1);
+  threatenButton.smoothed = false;
+  threatenButton.inputEnabled = true;
+  threatenButton.input.priorityID = 1;
+  threatenButton.input.useHandCursor = true;
+  threatenButton.events.onInputDown.add(team.threaten, team);
+
+  var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true, wordWrapWidth: threatenButton.width, align: "center" };
+
+  text = game.add.text(600, 550, "Threaten", style);
+  text.anchor.set(0.5, 0.5);
 }
 
 function update() 

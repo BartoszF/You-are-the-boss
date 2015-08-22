@@ -38,6 +38,7 @@ function Person()
 }
 
 Person.prototype.guy = null;
+Person.prototype.report = null;
 Person.layer = null;
 
 Person.init = function()
@@ -47,6 +48,7 @@ Person.init = function()
 
 
   game.load.image("guy","res/graphics/guy_torso.png");
+  game.load.image("guy","res/graphics/report.png");
   game.load.spritesheet("faces","res/graphics/faces.png",64,64,Person.maxFaces);
   game.load.spritesheet("mouths","res/graphics/mouths.png",64,32,Person.maxMouths);
   game.load.spritesheet("eyes","res/graphics/eyes.png",64,32,Person.maxEyes);
