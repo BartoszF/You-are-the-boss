@@ -2,14 +2,14 @@ function Team()
 {
   for(var i=0;i<50;i++)
   {
-    var p = new Person();
-    this.guys.push(p);
+    this.guys[i]= new Person();
+    console.log(i + " " + this.guys[i].work)
   }
 
   this.report = game.add.sprite(400,800,"report");
   this.report.anchor.set(0.5,0.5);
 
-    bmd = game.add.bitmapData(256,128);
+  bmd = game.add.bitmapData(256,128);
   rep = game.add.sprite(0, 0, bmd);
   rep.anchor.set(0.5);
 
@@ -19,6 +19,8 @@ function Team()
   var rep2Tween = game.add.tween(rep.position).from({y:800},1).to({y: 450}, 500, Phaser.Easing.Quadratic.In,true);
   var tween = game.add.tween(this.guys[this.actual].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
   this.guys[this.actual].visible(true);
+
+  this.drawRep();
 }
 
 Team.prototype.guys = [];
@@ -72,6 +74,7 @@ Team.prototype.nextRepCom = function()
 Team.prototype.drawRep = function()
 {
   var wo = this.guys[this.actual].work;
+  console.log(this.actual + " " + wo);
   var min = (wo.length-10) < 0 ? 0 : (wo.length-10);
 
   bmd.clear();

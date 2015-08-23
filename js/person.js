@@ -29,12 +29,19 @@ function Person()
 
   this.guy.position.x = 1200;
 
+  this.work = new Array();
+  
+
   Math.seedrandom(Date.now() + Math.random() + (Person.r++));
   this.work[0] = (Math.random()*2) - 1;
+  console.log(this.work[0]);
   for(var i = 1;i<5;i++)
   {
     this.work[i] = this.work[i-1] + (Math.random()*0.4)-0.2;
   }
+
+  this.stress = Math.random() * 15;
+  this.mood = 0;
 
   Person.layer.add(this.guy);
 }
@@ -52,7 +59,6 @@ Person.init = function()
 {
   Person.maxEyes = 3;
   Person.maxMouths = 4;
-
 
   game.load.image("guy","res/graphics/guy_torso.png");
   game.load.image("report","res/graphics/report.png");
