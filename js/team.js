@@ -31,18 +31,23 @@ Team.prototype.tempStress = 0;
 
 Team.prototype.next = function()
 {
+  var nex;
+  nex = this.actual+1;
+
   if(this.actual+1 >= this.guys.length)
   {
     this.endOfDay();
+    this.actual = 0;
   }
 
   var tween = game.add.tween(this.guys[this.actual].guy.position).to({x: -400}, 500, Phaser.Easing.Quadratic.Out,true);
-  this.guys[this.actual+1].visible(true);
-  var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
+  this.guys[nex].visible(true);
+  var tween2 = game.add.tween(this.guys[nex].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
 
   this.actual++;
 
   this.nextRep();
+  console.log(this.actual);
 }
 
 Team.prototype.fire = function()
@@ -54,6 +59,7 @@ Team.prototype.fire = function()
     if(this.actual+1 >= this.guys.length)
     {
       this.endOfDay();
+      this.actual = 0;
     }
   
     var tween = game.add.tween(this.guys[this.actual].guy.position).to({y: -800}, 500, Phaser.Easing.Quadratic.Out,true);
@@ -64,6 +70,7 @@ Team.prototype.fire = function()
     this.nextRep();
 
     workersText.text = "Workers: " + this.guys.length;
+    console.log(this.actual);
   }
 }
 
@@ -85,8 +92,7 @@ Team.prototype.nextRepCom = function()
 Team.prototype.drawRep = function()
 {
   var wo = this.guys[this.actual].work;
-  console.log(this.actual + " " + wo);
-  var min = (wo.length-10) < 0 ? 0 : (wo.length-10);
+  var min = (wo.length-5) < 0 ? 0 : (wo.length-5);
 
   bmd.clear();
   bmd.ctx.beginPath();
@@ -94,11 +100,13 @@ Team.prototype.drawRep = function()
 
   for(var i =min+1;i<wo.length;i++)
   {
+    //bmd.ctx.beginPath();
     if(wo[i] > 0) bmd.ctx.strokeStyle = "green";
     else bmd.ctx.strokeStyle = "red";
     bmd.ctx.lineTo(25+i*32, 64 - wo[i]*36);
     bmd.ctx.lineWidth = 2;
     bmd.ctx.stroke();
+    //bmd.ctx.closePath();
     
   }
   bmd.ctx.closePath();
@@ -109,7 +117,7 @@ Team.prototype.praise = function()
 {
   if(running)
   {
-    this.guys[this.actual].mood = 0.5;
+    this.guys[this.actual].mood = 0.2;
     this.guys[this.actual].stress *= 0.5;
     this.next();
   }
@@ -119,8 +127,8 @@ Team.prototype.threaten = function()
 {
   if(running)
   {
-    this.guys[this.actual].mood = 1;
-    this.guys[this.actual].stress *= 1.75;
+    this.guys[this.actual].mood = 1.5;
+    this.guys[this.actual].stress *= 1.8;
     this.next();
   }
 }
@@ -146,13 +154,18 @@ Team.prototype.endOfDay = function()
 
 Team.prototype.definitiveEnd = function()
 {
-  var income = 0;
+  var income = this.guys.length * -200;
   for(var i = 0;i<this.guys.length;i++)
   {
     var g = this.guys[i];
-    income += g.work[g.work.length-1] * 100;
+    income += g.work[g.work.length-1] * 250;
 
-    g.work[g.work.length] = g.work[g.work.length-1] + (Math.random() * g.mood) - g.stress/100 - 1;
+    g.work[g.work.length] = g.work[g.work.length-1] + (Math.random() * g.mood) - g.stress/100;
+    if(g.work[g.work.length]> 1) g.work[g.work.length] = 1;
+    if(g.work[g.work.length] < -1) g.work[g.work.length] = -1;
+
+    g.mood -= 0.2;
+    if(g.mood < 0.01) g.mood = 0.01;
   }
 
   money += income;
@@ -165,5 +178,14 @@ Team.prototype.definitiveEnd = function()
 
 Team.prototype.nextDay = function()
 {
-  
+  var bg = game.add.tween(b2Group.position).to({y:600},250,Phaser.Easing.Quadratic.Out,true);
+  var repTween = game.add.tween(this.report.position).from({y:800},1).to({y: 450}, 500, Phaser.Easing.Quadratic.In,true);
+  var rep2Tween = game.add.tween(rep.position).from({y:800},1).to({y: 450}, 500, Phaser.Easing.Quadratic.In,true);
+  var tween = game.add.tween(this.guys[this.actual].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
+  this.guys[this.actual].visible(true);
+
+  this.drawRep();
+
+  time = maxTime;
+  running = true;
 }

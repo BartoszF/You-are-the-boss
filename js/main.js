@@ -126,12 +126,10 @@ function update()
     if(loaded && running)
     {
       var el = game.time.elapsedMS;
-      console.log(el);
       if(el != 0 || el)
       {
         time -= el;
         prog_fg.scale.x = maxScale * time/maxTime;
-        console.log(prog_fg.scale.x + " " + time/maxTime);
       }
     
 
@@ -139,7 +137,6 @@ function update()
     {
       running = false;
       team.endOfDay();
-      console.log("STOP");
     }
   }
 }

@@ -34,7 +34,6 @@ function Person()
 
   Math.seedrandom(Date.now() + Math.random() + (Person.r++));
   this.work[0] = (Math.random()*2) - 1;
-  console.log(this.work[0]);
   for(var i = 1;i<5;i++)
   {
     this.work[i] = this.work[i-1] + (Math.random()*0.4)-0.2;
@@ -42,7 +41,7 @@ function Person()
     if(this.work[i] < -1) this.work[i] = -1;
   }
 
-  this.stress = Math.random() * 15;
+  this.stress = (Math.random() * 15) + 1;
   this.mood = 0;
 
   Person.layer.add(this.guy);
