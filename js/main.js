@@ -12,6 +12,8 @@ function preload()
   game.load.image("desk","res/graphics/desk.png");
   game.load.image("fire_butt","res/graphics/fire_butt.png");
   game.load.image("blue_butt","res/graphics/blue_butt.png");
+  game.load.image("progress_bg","res/graphics/progress_bg.png");
+  game.load.image("progress_fg","res/graphics/progress_fg.png");
 }
 
 function create() 
@@ -30,9 +32,21 @@ function create()
 
   team = new Team();
 
+  var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" };
+
   var fire = makeButton(game.world.centerX,550,'fire_butt',"FIRE",team.fire,team,{ font: "38px Minecraft", stroke : '#7D0214', strokeThickness : 2, fill: "#00000", wordWrap: true, align: "center" });
-  var praise = makeButton(200,550,'blue_butt',"Praise",team.praise,team,{ font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" });
-  var threaten = makeButton(600,550,'blue_butt',"Threaten",team.threaten,team,{ font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" });
+  var praise = makeButton(200,550,'blue_butt',"Praise",team.praise,team,style);
+  var threaten = makeButton(600,550,'blue_butt',"Threaten",team.threaten,team,style);
+
+  var style2 = { font: "20px Minecraft", fill: "#00000", wordWrap: false,  align: "center" };
+
+  var endText = game.add.text(700, 25, "End of day in:", style);
+  endText.anchor.set(0.5, 0.5);
+
+  var prog_bg = game.add.sprite(700,50,"progress_bg");
+  prog_bg.anchor.set(0.5);
+  prog_bg.scale.set(0.7);
+  prog_bg.smoothed = false;
 }
 
 function update() 

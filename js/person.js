@@ -38,6 +38,8 @@ function Person()
   for(var i = 1;i<5;i++)
   {
     this.work[i] = this.work[i-1] + (Math.random()*0.4)-0.2;
+    if(this.work[i] > 1) this.work[i] = 1;
+    if(this.work[i] < -1) this.work[i] = -1;
   }
 
   this.stress = Math.random() * 15;

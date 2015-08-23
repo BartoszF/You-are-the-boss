@@ -27,27 +27,33 @@ Team.prototype.guys = [];
 Team.prototype.actual = 0;
 Team.prototype.report = null;
 Team.prototype.stress = 0;
+Team.prototype.tempStress = 0;
 
 Team.prototype.next = function()
 {
+  if(this.actual+1 >= this.guys.length)
+  {
+    this.endOfDay();
+  }
+
   var tween = game.add.tween(this.guys[this.actual].guy.position).to({x: -400}, 500, Phaser.Easing.Quadratic.Out,true);
   this.guys[this.actual+1].visible(true);
   var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
 
-  if(this.actual+1 < this.guys.length)
-  {
-    this.actual++;
-  }
-  else
-  {
-    this.endOfDay();
-  }
+  this.actual++;
 
   this.nextRep();
 }
 
 Team.prototype.fire = function()
 {
+  this.tempStress += 1;
+
+  if(this.actual+1 >= this.guys.length)
+  {
+    this.endOfDay();
+  }
+
   var tween = game.add.tween(this.guys[this.actual].guy.position).to({y: -800}, 500, Phaser.Easing.Quadratic.Out,true);
   this.guys[this.actual+1].visible(true);
   var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
@@ -110,11 +116,13 @@ Team.prototype.threaten = function()
 
 Team.prototype.endOfDay = function()
 {
+  this.stress = tempStress;
 
   for(var i=0;i<this.guys.length;i++)
   {
     this.stress += this.guys[i].stress;
   }
 
-  this.stress /= this.guys[i].length;
+  this.stress /= (this.guys.length+1);
+  tempStress = 0;
 }
