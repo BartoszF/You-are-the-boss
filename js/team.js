@@ -62,6 +62,8 @@ Team.prototype.fire = function()
     this.guys.splice(this.actual,1);
   
     this.nextRep();
+
+    workersText.text = "Workers: " + this.guys.length;
   }
 }
 
@@ -107,7 +109,7 @@ Team.prototype.praise = function()
 {
   if(running)
   {
-    this.guys[this.actual].mood = 2;
+    this.guys[this.actual].mood = 0.5;
     this.guys[this.actual].stress *= 0.5;
     this.next();
   }
@@ -117,8 +119,8 @@ Team.prototype.threaten = function()
 {
   if(running)
   {
-    this.guys[this.actual].mood = -2;
-    this.guys[this.actual].stress *= 1.5;
+    this.guys[this.actual].mood = 1;
+    this.guys[this.actual].stress *= 1.75;
     this.next();
   }
 }
@@ -133,5 +135,35 @@ Team.prototype.endOfDay = function()
   }
 
   this.stress /= (this.guys.length+1);
+
+  game.add.tween(this.guys[this.actual].guy.position).to({x: -400}, 500, Phaser.Easing.Quadratic.Out,true);
+  game.add.tween(this.report.position).to({y: 800}, 250, Phaser.Easing.Quadratic.Out,true);
+  game.add.tween(rep.position).to({y: 800}, 250, Phaser.Easing.Quadratic.Out,true);
+
+  var tween = game.add.tween(b2Group.position).to({y: 0}, 250, Phaser.Easing.Quadratic.In,true);
+  tween.onComplete.add(this.definitiveEnd,this);
+}
+
+Team.prototype.definitiveEnd = function()
+{
+  var income = 0;
+  for(var i = 0;i<this.guys.length;i++)
+  {
+    var g = this.guys[i];
+    income += g.work[g.work.length-1] * 100;
+
+    g.work[g.work.length] = g.work[g.work.length-1] + (Math.random() * g.mood) - g.stress/100 - 1;
+  }
+
+  money += income;
   this.tempStress = 0;
+
+  moneyText.text = "Money: " + parseInt(money);
+  stressText.text = "Stress: " + parseInt(this.stress) + "%";
+  incomeText.text = "Income: " + parseInt(income);
+}
+
+Team.prototype.nextDay = function()
+{
+  
 }

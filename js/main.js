@@ -1,5 +1,6 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
-var bg;
+var bg, bg2;
+var bg2Group;
 var persLayer;
 var desk;
 var team;
@@ -9,6 +10,12 @@ var maxScale = 3.65;
 var time = 10000;
 var maxTime = 10000;
 
+var stressText, incomeText, moneyText;
+
+var workersText;
+
+var money = 100000;
+
 var loaded = false;
 var running = false;
 
@@ -16,6 +23,7 @@ function preload()
 {
   Person.init();
   game.load.image("bg","res/graphics/bg.png");
+  game.load.image("bg2","res/graphics/bg2.png");
   game.load.image("desk","res/graphics/desk.png");
   game.load.image("fire_butt","res/graphics/fire_butt.png");
   game.load.image("blue_butt","res/graphics/blue_butt.png");
@@ -56,8 +64,8 @@ function create()
 
   var style2 = { font: "20px Minecraft", fill: "#00000", wordWrap: false,  align: "center" };
 
-  var endText = game.add.text(700, 25, "End of day in:", style2);
-  endText.anchor.set(0.5, 0.5);
+  var endText = game.add.text(610, 25, "End of day in:", style2);
+  endText.anchor.set(0, 0.5);
 
   var prog_bg = game.add.sprite(700,50,"progress_bg");
   prog_bg.anchor.set(0.5);
@@ -69,6 +77,45 @@ function create()
   prog_fg.scale.set(0.65);
   prog_fg.scale.x = 3.65;
   prog_fg.smoothed = false;
+
+  workersText = game.add.text(610, 80, "Workers: "+team.guys.length,style2);
+
+  b2Group = game.add.group();
+  b2Group.position.y = 600;
+
+  bg2 = game.make.tileSprite(0,0,800,600,"bg2");
+  bg2.smoothed = false;
+
+  b2Group.add(bg2);
+
+  stressText = game.make.text(400,200, "",style);
+  stressText.anchor.set(0.5,0.5);
+  incomeText = game.make.text(400,300, "",style);
+  incomeText.anchor.set(0.5,0.5);
+  moneyText = game.make.text(400,400, "",style);
+  moneyText.anchor.set(0.5,0.5);
+
+  b2Group.add(stressText);
+  b2Group.add(incomeText);
+  b2Group.add(moneyText);
+
+  var butt = game.add.sprite(400,500,'blue_butt');
+  butt.anchor.set(0.5,0.5);
+  butt.scale.set(0.75,1);
+  butt.smoothed = false;
+  butt.inputEnabled = true;
+  butt.input.priorityID = 1;
+  butt.input.useHandCursor = true;
+  butt.events.onInputDown.add(team.nextDay, team);
+
+  style['wordWrapWidth'] = butt.width;
+  style['font'] = '35px Minecraft';
+
+  var text = game.add.text(405, 505, "NEXT DAY", style);
+  text.anchor.set(0.5, 0.5);
+
+  b2Group.add(butt);
+  b2Group.add(text);
 
   loaded = running = true;
 }
@@ -91,6 +138,7 @@ function update()
     if(time <= 0)
     {
       running = false;
+      team.endOfDay();
       console.log("STOP");
     }
   }
