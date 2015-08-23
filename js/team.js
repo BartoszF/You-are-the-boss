@@ -47,19 +47,22 @@ Team.prototype.next = function()
 
 Team.prototype.fire = function()
 {
-  this.tempStress += 1;
-
-  if(this.actual+1 >= this.guys.length)
+  if(running)
   {
-    this.endOfDay();
+    this.tempStress += 1;
+  
+    if(this.actual+1 >= this.guys.length)
+    {
+      this.endOfDay();
+    }
+  
+    var tween = game.add.tween(this.guys[this.actual].guy.position).to({y: -800}, 500, Phaser.Easing.Quadratic.Out,true);
+    this.guys[this.actual+1].visible(true);
+    var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
+    this.guys.splice(this.actual,1);
+  
+    this.nextRep();
   }
-
-  var tween = game.add.tween(this.guys[this.actual].guy.position).to({y: -800}, 500, Phaser.Easing.Quadratic.Out,true);
-  this.guys[this.actual+1].visible(true);
-  var tween2 = game.add.tween(this.guys[this.actual+1].guy.position).from({x:1200},1).to({x: 400}, 500, Phaser.Easing.Quadratic.In,true);
-  this.guys.splice(this.actual,1);
-
-  this.nextRep();
 }
 
 Team.prototype.nextRep = function()
@@ -102,21 +105,27 @@ Team.prototype.drawRep = function()
 
 Team.prototype.praise = function()
 {
-  this.guys[this.actual].mood = 2;
-  this.guys[this.actual].stress *= 0.5;
-  this.next();
+  if(running)
+  {
+    this.guys[this.actual].mood = 2;
+    this.guys[this.actual].stress *= 0.5;
+    this.next();
+  }
 }
 
 Team.prototype.threaten = function()
 {
-  this.guys[this.actual].mood = -2;
-  this.guys[this.actual].stress *= 1.5;
-  this.next();
+  if(running)
+  {
+    this.guys[this.actual].mood = -2;
+    this.guys[this.actual].stress *= 1.5;
+    this.next();
+  }
 }
 
 Team.prototype.endOfDay = function()
 {
-  this.stress = tempStress;
+  this.stress = this.tempStress;
 
   for(var i=0;i<this.guys.length;i++)
   {
@@ -124,5 +133,5 @@ Team.prototype.endOfDay = function()
   }
 
   this.stress /= (this.guys.length+1);
-  tempStress = 0;
+  this.tempStress = 0;
 }

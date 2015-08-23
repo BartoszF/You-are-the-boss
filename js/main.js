@@ -4,6 +4,13 @@ var persLayer;
 var desk;
 var team;
 var bmd,rep;
+var prog_fg;
+var maxScale = 3.65;
+var time = 10000;
+var maxTime = 10000;
+
+var loaded = false;
+var running = false;
 
 function preload() 
 {
@@ -14,6 +21,15 @@ function preload()
   game.load.image("blue_butt","res/graphics/blue_butt.png");
   game.load.image("progress_bg","res/graphics/progress_bg.png");
   game.load.image("progress_fg","res/graphics/progress_fg.png");
+
+  //if (!game.device.desktop)
+  //{
+      game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+      //game.scale.setMinMax(800, 600, 800, 600);
+      game.scale.pageAlignHorizontally = true;
+      game.scale.pageAlignVertically = true;
+      game.scale.forceOrientation(true, false);
+  //}
 }
 
 function create() 
@@ -40,18 +56,44 @@ function create()
 
   var style2 = { font: "20px Minecraft", fill: "#00000", wordWrap: false,  align: "center" };
 
-  var endText = game.add.text(700, 25, "End of day in:", style);
+  var endText = game.add.text(700, 25, "End of day in:", style2);
   endText.anchor.set(0.5, 0.5);
 
   var prog_bg = game.add.sprite(700,50,"progress_bg");
   prog_bg.anchor.set(0.5);
   prog_bg.scale.set(0.7);
   prog_bg.smoothed = false;
+
+  prog_fg = game.add.sprite(612,50,"progress_fg");
+  prog_fg.anchor.set(0,0.5);
+  prog_fg.scale.set(0.65);
+  prog_fg.scale.x = 3.65;
+  prog_fg.smoothed = false;
+
+  loaded = running = true;
 }
 
 function update() 
 {
-  //team.drawRep();
+    //team.drawRep();
+    if(loaded && running)
+    {
+      var el = game.time.elapsedMS;
+      console.log(el);
+      if(el != 0 || el)
+      {
+        time -= el;
+        prog_fg.scale.x = maxScale * time/maxTime;
+        console.log(prog_fg.scale.x + " " + time/maxTime);
+      }
+    
+
+    if(time <= 0)
+    {
+      running = false;
+      console.log("STOP");
+    }
+  }
 }
 
 function makeButton(x,y,spri,text,func,list,style)
