@@ -3,7 +3,6 @@ function Team()
   for(var i=0;i<50;i++)
   {
     this.guys[i]= new Person();
-    console.log(i + " " + this.guys[i].work)
   }
 
   this.report = game.add.sprite(400,800,"report");
@@ -54,9 +53,9 @@ Team.prototype.fire = function()
 {
   if(running)
   {
-    this.tempStress += 1;
+    this.tempStress += 5;
   
-    if(this.actual+1 >= this.guys.length)
+    if(this.guys.length ==0 || this.actual+1 >= this.guys.length)
     {
       this.endOfDay();
       this.actual = 0;
@@ -117,8 +116,8 @@ Team.prototype.praise = function()
 {
   if(running)
   {
-    this.guys[this.actual].mood = 0.2;
-    this.guys[this.actual].stress *= 0.5;
+    this.guys[this.actual].mood = -0.1;
+    this.guys[this.actual].stress *= 1.1;
     this.next();
   }
 }
@@ -139,6 +138,7 @@ Team.prototype.endOfDay = function()
 
   for(var i=0;i<this.guys.length;i++)
   {
+    this.guys[i].stress *= 1.2;
     this.stress += this.guys[i].stress;
   }
 
@@ -158,6 +158,9 @@ Team.prototype.definitiveEnd = function()
   for(var i = 0;i<this.guys.length;i++)
   {
     var g = this.guys[i];
+    this.guys[i].stress += this.stress;
+    this.guys[i].stress /= 2;
+
     income += g.work[g.work.length-1] * 250;
 
     g.work[g.work.length] = g.work[g.work.length-1] + (Math.random() * g.mood) - g.stress/100;
@@ -174,6 +177,41 @@ Team.prototype.definitiveEnd = function()
   moneyText.text = "Money: " + parseInt(money);
   stressText.text = "Stress: " + parseInt(this.stress) + "%";
   incomeText.text = "Income: " + parseInt(income);
+  
+  if(Math.random() * 100 < this.stress)
+  {
+    if(this.stress >= 20 )
+    {
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+    }
+    if(this.stress >= 45)
+    {
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+    }
+    if(this.stress >= 60)
+    {
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+      this.guys.splice(parseInt(Math.random() * this.guys.length),1);
+    }
+  }
+  else if(Math.random() * 100 > 80)
+  {
+    this.guys.push(new Person());
+  }
+
+  if(money <= 0 || this.guys.length<=0 || this.stress >= 100)
+  {
+    this.stress = 100;
+    game.add.tween(go.position).to({y:0},250,Phaser.Easing.Quadratic.Out,true);
+    game.add.tween(newD.position).to({y:10000},1,Phaser.Easing.Quadratic.Out,true);
+    newT.position.y = 100;
+    newT.text = "GAME OVER";
+  }
+
+  workersText.text = "Workers: " + this.guys.length;
 }
 
 Team.prototype.nextDay = function()

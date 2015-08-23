@@ -1,6 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
-var bg, bg2;
+var bg, bg2, go;
 var bg2Group;
+var newD, newT;
 var persLayer;
 var desk;
 var team;
@@ -25,6 +26,7 @@ function preload()
   game.load.image("bg","res/graphics/bg.png");
   game.load.image("bg2","res/graphics/bg2.png");
   game.load.image("desk","res/graphics/desk.png");
+  game.load.image("game_over","res/graphics/go.png");
   game.load.image("fire_butt","res/graphics/fire_butt.png");
   game.load.image("blue_butt","res/graphics/blue_butt.png");
   game.load.image("progress_bg","res/graphics/progress_bg.png");
@@ -59,7 +61,7 @@ function create()
   var style = { font: "38px Minecraft", fill: "#00000", wordWrap: true,  align: "center" };
 
   var fire = makeButton(game.world.centerX,550,'fire_butt',"FIRE",team.fire,team,{ font: "38px Minecraft", stroke : '#7D0214', strokeThickness : 2, fill: "#00000", wordWrap: true, align: "center" });
-  var praise = makeButton(200,550,'blue_butt',"Praise",team.praise,team,style);
+  var praise = makeButton(200,550,'blue_butt',"Next",team.praise,team,style);
   var threaten = makeButton(600,550,'blue_butt',"Threaten",team.threaten,team,style);
 
   var style2 = { font: "20px Minecraft", fill: "#00000", wordWrap: false,  align: "center" };
@@ -80,6 +82,14 @@ function create()
 
   workersText = game.add.text(610, 80, "Workers: "+team.guys.length,style2);
 
+  go = game.add.group();
+  go.position.y = 600;
+
+  got = game.make.tileSprite(0,0,800,600,"game_over");
+  got.smoothed = false;
+
+  go.add(got);
+
   b2Group = game.add.group();
   b2Group.position.y = 600;
 
@@ -99,23 +109,23 @@ function create()
   b2Group.add(incomeText);
   b2Group.add(moneyText);
 
-  var butt = game.add.sprite(400,500,'blue_butt');
-  butt.anchor.set(0.5,0.5);
-  butt.scale.set(0.75,1);
-  butt.smoothed = false;
-  butt.inputEnabled = true;
-  butt.input.priorityID = 1;
-  butt.input.useHandCursor = true;
-  butt.events.onInputDown.add(team.nextDay, team);
+  newD = game.add.sprite(400,500,'blue_butt');
+  newD.anchor.set(0.5,0.5);
+  newD.scale.set(0.75,1);
+  newD.smoothed = false;
+  newD.inputEnabled = true;
+  newD.input.priorityID = 1;
+  newD.input.useHandCursor = true;
+  newD.events.onInputDown.add(team.nextDay, team);
 
-  style['wordWrapWidth'] = butt.width;
+  style['wordWrapWidth'] = newD.width;
   style['font'] = '35px Minecraft';
 
-  var text = game.add.text(405, 505, "NEXT DAY", style);
-  text.anchor.set(0.5, 0.5);
+  newT = game.add.text(405, 505, "NEXT DAY", style);
+  newT.anchor.set(0.5, 0.5);
 
-  b2Group.add(butt);
-  b2Group.add(text);
+  b2Group.add(newD);
+  b2Group.add(newT);
 
   loaded = running = true;
 }
